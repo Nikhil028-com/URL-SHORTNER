@@ -80,6 +80,13 @@ export async function createUrl({title, longUrl, customUrl, user_id}, qrcode) {
 }
 
 export async function deleteUrl(id) {
+  // First delete associated clicks to prevent foreign key constraint violations
+  try {
+    await supabase.from("clicks").delete().eq("url_id", id);
+  } catch (clicksErr) {
+    console.warn("Could not delete child clicks before URL deletion:", clicksErr);
+  }
+
   const {data, error} = await supabase.from("urls").delete().eq("id", id);
 
   if (error) {

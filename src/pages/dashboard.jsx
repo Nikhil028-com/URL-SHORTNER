@@ -43,45 +43,53 @@ const Dashboard = () => {
   }, [urls?.length]);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6 sm:gap-8 w-full min-w-0">
       {(loading || loadingClicks) && (
         <BarLoader width={"100%"} color="#36d7b7" />
       )}
-      <div className="grid grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Links Created</CardTitle>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Card className="bg-gray-900 border-border">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg sm:text-xl text-gray-300">Links Created</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>{urls?.length}</p>
+            <p className="text-3xl sm:text-4xl font-extrabold">{urls?.length || 0}</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Clicks</CardTitle>
+        <Card className="bg-gray-900 border-border">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg sm:text-xl text-gray-300">Total Clicks</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>{clicks?.length}</p>
+            <p className="text-3xl sm:text-4xl font-extrabold">{clicks?.length || 0}</p>
           </CardContent>
         </Card>
       </div>
-      <div className="flex justify-between">
-        <h1 className="text-4xl font-extrabold">My Links</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 className="text-3xl sm:text-4xl font-extrabold">My Links</h1>
         <CreateLink />
       </div>
-      <div className="relative">
+      <div className="relative w-full">
         <Input
           type="text"
           placeholder="Filter Links..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          className="pr-10 bg-gray-900 border-border text-white"
         />
-        <Filter className="absolute top-2 right-2 p-1" />
+        <Filter className="absolute top-2.5 right-3 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
       {error && <Error message={error?.message} />}
-      {(filteredUrls || []).map((url, i) => (
-        <LinkCard key={i} url={url} fetchUrls={fnUrls} />
-      ))}
+      <div className="flex flex-col gap-4 w-full min-w-0">
+        {(filteredUrls || []).map((url) => (
+          <LinkCard key={url?.id} url={url} fetchUrls={fnUrls} />
+        ))}
+        {filteredUrls && filteredUrls.length === 0 && (
+          <div className="p-8 text-center text-gray-400 bg-gray-900 rounded-xl border border-border">
+            {searchQuery ? "No links match your search filter." : "No links created yet. Click 'Create New Link' above to get started!"}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 // this file is for state management and handling state of the user
 // inside this we will fetch current's logged in user session
 import {createContext, useContext, useEffect} from "react";

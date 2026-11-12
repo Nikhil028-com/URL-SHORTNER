@@ -1,0 +1,8 @@
+{
+  "name": "Trimrr URL Shortener",
+  "description": "A modern URL shortener with link analytics, QR code generation, click stats tracking, and custom branded short links.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

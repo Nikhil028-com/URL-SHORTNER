@@ -50,8 +50,22 @@ export const storeClicks = async ({id, originalUrl}) => {
     const res = parser.getResult();
     const device = res.type || "desktop"; // Default to desktop if type is not detected
 
-    const response = await fetch("https://ipapi.co/json");
-    const {city, country_name: country} = await response.json();
+    let city = "New York";
+    let country = "United States";
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const response = await fetch("https://ipapi.co/json", {signal: controller.signal});
+      clearTimeout(timeoutId);
+      if (response.ok) {
+        const ipData = await response.json();
+        if (ipData.city) city = ipData.city;
+        if (ipData.country_name) country = ipData.country_name;
+      }
+    } catch {
+      // Fallback if IP lookup is blocked or times out
+    }
 
     // Record the click
     await supabase.from("clicks").insert({
@@ -62,8 +76,13 @@ export const storeClicks = async ({id, originalUrl}) => {
     });
 
     // Redirect to the original URL
-    window.location.href = originalUrl;
+    if (originalUrl) {
+      window.location.href = originalUrl;
+    }
   } catch (error) {
     console.error("Error recording click:", error);
+    if (originalUrl) {
+      window.location.href = originalUrl;
+    }
   }
 };

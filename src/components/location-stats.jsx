@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import {
   LineChart,
   Line,
@@ -25,11 +24,11 @@ export default function Location({stats = []}) {
   }));
 
   return (
-    <div style={{width: "100%", height: 300}}>
-      <ResponsiveContainer>
-        <LineChart width={700} height={300} data={cities.slice(0, 5)}>
-          <XAxis dataKey="city" />
-          <YAxis />
+    <div className="w-full h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={cities.slice(0, 5)}>
+          <XAxis dataKey="city" stroke="#888888" fontSize={12} />
+          <YAxis stroke="#888888" fontSize={12} />
           <Tooltip labelStyle={{color: "green"}} />
           <Legend />
           <Line type="monotone" dataKey="count" stroke="#82ca9d" />

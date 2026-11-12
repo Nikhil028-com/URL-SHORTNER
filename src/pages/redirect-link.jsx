@@ -20,11 +20,10 @@ const RedirectLink = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && data) {
+    if (!loading && data?.id) {
       fnStats();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
+  }, [loading, data]);
 
   if (loading || loadingStats) {
     return (
